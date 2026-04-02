@@ -1,9 +1,9 @@
 import { Head, Link, router } from '@inertiajs/react';
-import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
+import { useLiveReload } from '@/hooks/use-live-reload';
+import { advance } from '@/routes/quizzes/admin/sessions';
 import { show as displayShow } from '@/routes/quizzes/display';
 import { joinPage as playerJoinPage } from '@/routes/quizzes/player';
-import { advance } from '@/routes/quizzes/admin/sessions';
 
 type QuizPayload = {
     id: number;
@@ -42,15 +42,10 @@ export default function QuizAdminLive({
     answersCount: number;
     leaderboard: LeaderboardItem[];
 }) {
-    useEffect(() => {
-        const interval = setInterval(() => {
-            router.reload({
-                only: ['session', 'question', 'answersCount', 'leaderboard'],
-            });
-        }, 3000);
-
-        return () => clearInterval(interval);
-    }, []);
+    useLiveReload({
+        only: ['session', 'question', 'answersCount', 'leaderboard'],
+        intervalMs: 1000,
+    });
 
     const advanceSession = (
         action: 'reveal_answers' | 'next_question' | 'finish',

@@ -1,8 +1,9 @@
-import { Head, router, useForm } from '@inertiajs/react';
+import { Head, useForm } from '@inertiajs/react';
 import { useEffect } from 'react';
 import PlayerQuizController from '@/actions/App/Http/Controllers/Quiz/PlayerQuizController';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useLiveReload } from '@/hooks/use-live-reload';
 
 type SessionPayload = {
     id: number;
@@ -44,6 +45,11 @@ export default function QuizPlayerPlay({
 }) {
     const hasAnsweredCurrentQuestion = existingAnswer !== null;
 
+    useLiveReload({
+        only: ['session', 'question', 'player', 'existingAnswer'],
+        intervalMs: 1000,
+    });
+
     const { data, setData, post, processing } = useForm({
         quiz_question_id: question?.id ?? 0,
         answer_choice: existingAnswer?.answer_choice ?? '',
@@ -51,20 +57,10 @@ export default function QuizPlayerPlay({
     });
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            router.reload({
-                only: ['session', 'question', 'player', 'existingAnswer'],
-            });
-        }, 2500);
-
-        return () => clearInterval(interval);
-    }, []);
-
-    useEffect(() => {
         setData('quiz_question_id', question?.id ?? 0);
         setData('answer_choice', existingAnswer?.answer_choice ?? '');
         setData('answer_text', existingAnswer?.answer_text ?? '');
-    }, [question?.id, existingAnswer?.answer_choice, existingAnswer?.answer_text]);
+    }, [question?.id, existingAnswer?.answer_choice, existingAnswer?.answer_text, setData]);
 
     const submit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();

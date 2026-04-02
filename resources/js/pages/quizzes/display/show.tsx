@@ -1,5 +1,6 @@
-import { Head, router } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
 import { useEffect, useMemo, useState } from 'react';
+import { useLiveReload } from '@/hooks/use-live-reload';
 
 type SessionPayload = {
     id: number;
@@ -40,17 +41,11 @@ export default function QuizDisplayShow({
     const isBlurImage = question?.type === 'blur_image' && question.media_path;
     const [nowTick, setNowTick] = useState(() => Date.now());
 
-    useEffect(() => {
-        const refreshInterval = setInterval(() => {
-            router.reload({
-                only: ['session', 'question', 'leaderboard', 'answersCount'],
-            });
-        }, 3000);
-
-        return () => {
-            clearInterval(refreshInterval);
-        };
-    }, []);
+    useLiveReload({
+        only: ['session', 'question', 'leaderboard', 'answersCount'],
+        intervalMs: 1000,
+        runWhenHidden: true,
+    });
 
     useEffect(() => {
         const timerInterval = setInterval(() => {
