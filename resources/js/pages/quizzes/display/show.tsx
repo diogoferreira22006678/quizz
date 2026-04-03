@@ -81,9 +81,14 @@ export default function QuizDisplayShow({
 
     return (
         <>
-            <Head title={`Display ${session.code}`} />
+            <Head title={`Display ${session.code}`}>
+                <meta name="color-scheme" content="light" />
+            </Head>
 
-            <main className="min-h-screen bg-slate-100 bg-[radial-gradient(circle_at_top,_rgba(14,116,144,0.2),_transparent_55%),radial-gradient(circle_at_bottom,_rgba(251,191,36,0.2),_transparent_50%)] p-4 text-slate-900 md:p-8">
+            <main
+                className="quiz-force-light min-h-screen bg-slate-100 bg-[radial-gradient(circle_at_top,_rgba(14,116,144,0.2),_transparent_55%),radial-gradient(circle_at_bottom,_rgba(251,191,36,0.2),_transparent_50%)] p-4 !text-slate-900 md:p-8"
+                style={{ colorScheme: 'light' }}
+            >
                 <div className="mx-auto grid w-full max-w-7xl gap-6 xl:grid-cols-[2fr_1fr]">
                     <section className="space-y-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-xl backdrop-blur">
                         <p className="text-sm font-medium text-cyan-800">

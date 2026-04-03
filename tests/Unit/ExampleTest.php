@@ -13,4 +13,22 @@ class ExampleTest extends TestCase
     {
         $this->assertTrue(true);
     }
+
+    public function test_session_config_forces_database_driver_when_cookie_is_configured(): void
+    {
+        $originalSessionDriver = getenv('SESSION_DRIVER');
+
+        putenv('SESSION_DRIVER=cookie');
+
+        /** @var array<string, mixed> $sessionConfig */
+        $sessionConfig = require base_path('config/session.php');
+
+        $this->assertSame('database', $sessionConfig['driver']);
+
+        if ($originalSessionDriver === false) {
+            putenv('SESSION_DRIVER');
+        } else {
+            putenv("SESSION_DRIVER={$originalSessionDriver}");
+        }
+    }
 }

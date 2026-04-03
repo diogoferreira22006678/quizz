@@ -18,7 +18,9 @@ return [
     |
     */
 
-    'driver' => env('SESSION_DRIVER', 'database'),
+    'driver' => strtolower((string) env('SESSION_DRIVER', 'database')) === 'cookie'
+        ? 'database'
+        : env('SESSION_DRIVER', 'database'),
 
     /*
     |--------------------------------------------------------------------------

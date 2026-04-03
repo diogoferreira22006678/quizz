@@ -153,9 +153,14 @@ export default function QuizPlayerPlay({
 
     return (
         <>
-            <Head title={`Quiz ${session.code}`} />
+            <Head title={`Quiz ${session.code}`}>
+                <meta name="color-scheme" content="light" />
+            </Head>
 
-            <main className="mx-auto flex min-h-screen w-full max-w-3xl flex-col gap-6 bg-slate-100 bg-gradient-to-b from-rose-50 to-sky-50 p-4 text-slate-950 md:p-8">
+            <main
+                className="quiz-force-light mx-auto flex min-h-screen w-full max-w-3xl flex-col gap-6 bg-slate-100 bg-gradient-to-b from-rose-50 to-sky-50 p-4 !text-slate-900 md:p-8"
+                style={{ colorScheme: 'light' }}
+            >
                 <header className="rounded-xl border border-slate-200 bg-white p-4">
                     <p className="text-sm font-medium text-slate-700">Sessão {session.code}</p>
                     <h1 className="text-xl font-semibold">Olá, {player.nickname}</h1>
@@ -208,8 +213,8 @@ export default function QuizPlayerPlay({
                                         className={cn(
                                             'h-auto min-h-11 w-full justify-start whitespace-normal border-2 px-4 py-3 text-left text-base font-semibold',
                                             answerChoice === option
-                                                ? 'border-cyan-700 bg-cyan-100 text-cyan-950 dark:border-cyan-300 dark:bg-cyan-950/70 dark:text-cyan-100'
-                                                : 'border-slate-300 bg-white text-slate-900 hover:bg-slate-100 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800',
+                                                ? 'border-cyan-700 bg-cyan-100 text-cyan-950'
+                                                : 'border-slate-300 bg-white text-slate-900 hover:bg-slate-100',
                                         )}
                                         disabled={!canAnswerQuestion || isSubmitting}
                                         onClick={() => submitMultipleChoice(option)}

@@ -186,3 +186,37 @@
         --input: oklch(0.78 0 0);
     }
 }
+
+/* Keep quiz text readable in Chromium even with dark mode/auto-dark toggles. */
+html.dark .quiz-force-light {
+    color: oklch(0.145 0 0);
+    background-color: oklch(0.99 0 0);
+}
+
+html.dark .quiz-force-light * {
+    border-color: oklch(0.78 0 0);
+}
+
+html .quiz-force-light :is(h1, h2, h3, h4, h5, h6, p, span, a, strong, em, small, li, label, button, input, textarea) {
+    color: oklch(0.145 0 0) !important;
+    -webkit-text-fill-color: oklch(0.145 0 0) !important;
+}
+
+html .quiz-force-light {
+    forced-color-adjust: none;
+}
+
+/* Final safeguard: if .dark is applied, keep a light readable palette to avoid white text on Chrome. */
+html.dark {
+    color-scheme: light !important;
+    --background: oklch(1 0 0) !important;
+    --foreground: oklch(0.145 0 0) !important;
+    --card: oklch(1 0 0) !important;
+    --card-foreground: oklch(0.145 0 0) !important;
+    --popover: oklch(1 0 0) !important;
+    --popover-foreground: oklch(0.145 0 0) !important;
+    --muted: oklch(0.97 0 0) !important;
+    --muted-foreground: oklch(0.43 0 0) !important;
+    --border: oklch(0.922 0 0) !important;
+    --input: oklch(0.922 0 0) !important;
+}
