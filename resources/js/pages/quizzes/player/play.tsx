@@ -156,14 +156,14 @@ export default function QuizPlayerPlay({
             <Head title={`Quiz ${session.code}`} />
 
             <main className="mx-auto flex min-h-screen w-full max-w-3xl flex-col gap-6 bg-slate-100 bg-gradient-to-b from-rose-50 to-sky-50 p-4 text-slate-950 md:p-8 dark:bg-slate-950 dark:from-slate-950 dark:to-slate-900 dark:text-slate-100">
-                <header className="rounded-xl border border-slate-200 bg-white/90 p-4 dark:border-slate-700 dark:bg-slate-900/90">
+                <header className="rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-900">
                     <p className="text-sm font-medium text-slate-700 dark:text-slate-300">Sessão {session.code}</p>
                     <h1 className="text-xl font-semibold">Olá, {player.nickname}</h1>
                     <p className="text-sm text-slate-700 dark:text-slate-200">Pontuação: {player.score}</p>
                 </header>
 
                 {!question && (
-                    <section className="rounded-xl border border-slate-200 bg-white/90 p-8 text-center dark:border-slate-700 dark:bg-slate-900/90">
+                    <section className="rounded-xl border border-slate-200 bg-white p-8 text-center dark:border-slate-700 dark:bg-slate-900">
                         <p className="text-lg font-medium">A aguardar próxima pergunta...</p>
                     </section>
                 )}
@@ -171,7 +171,7 @@ export default function QuizPlayerPlay({
                 {question && (
                     <form
                         onSubmit={submit}
-                        className="space-y-4 rounded-xl border border-slate-200 bg-white/90 p-6 shadow-sm dark:border-slate-700 dark:bg-slate-900/90"
+                        className="space-y-4 rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-900"
                     >
                         {remainingSeconds !== null && (
                             <div className="space-y-2">

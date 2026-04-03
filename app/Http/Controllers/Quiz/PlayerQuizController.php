@@ -17,6 +17,10 @@ use Inertia\Response;
 
 class PlayerQuizController extends Controller
 {
+    private const PLAYER_SESSION_MAP_KEY = 'quiz-player-map';
+
+    private const MAX_TRACKED_PLAYER_SESSIONS = 8;
+
     public function joinPage(): Response
     {
         return Inertia::render('quizzes/player/join');
@@ -38,7 +42,7 @@ class PlayerQuizController extends Controller
             'last_seen_at' => now(),
         ]);
 
-        session()->put($this->playerSessionKey($session->id), $player->id);
+        $this->rememberPlayerForSession($session->id, $player->id);
 
         return to_route('quizzes.player.play', $session);
     }
@@ -47,7 +51,7 @@ class PlayerQuizController extends Controller
     {
         $session->load(['quiz', 'currentQuestion']);
 
-        $playerId = session($this->playerSessionKey($session->id));
+        $playerId = $this->playerIdForSession($session->id);
 
         $player = QuizPlayer::query()
             ->where('id', $playerId)
@@ -75,7 +79,7 @@ class PlayerQuizController extends Controller
         $session->load(['quiz', 'currentQuestion']);
         abort_unless($session->state === 'question_live', 422);
 
-        $playerId = session($this->playerSessionKey($session->id));
+        $playerId = $this->playerIdForSession($session->id);
 
         $player = QuizPlayer::query()
             ->where('id', $playerId)
@@ -132,6 +136,44 @@ class PlayerQuizController extends Controller
     private function playerSessionKey(int $sessionId): string
     {
         return "quiz-player-{$sessionId}";
+    }
+
+    private function rememberPlayerForSession(int $sessionId, int $playerId): void
+    {
+        $playerMap = session(self::PLAYER_SESSION_MAP_KEY, []);
+
+        if (! is_array($playerMap)) {
+            $playerMap = [];
+        }
+
+        $playerMap[(string) $sessionId] = $playerId;
+
+        if (count($playerMap) > self::MAX_TRACKED_PLAYER_SESSIONS) {
+            $playerMap = array_slice($playerMap, -self::MAX_TRACKED_PLAYER_SESSIONS, null, true);
+        }
+
+        session()->put(self::PLAYER_SESSION_MAP_KEY, $playerMap);
+        session()->forget($this->playerSessionKey($sessionId));
+    }
+
+    private function playerIdForSession(int $sessionId): ?int
+    {
+        $playerMap = session(self::PLAYER_SESSION_MAP_KEY, []);
+
+        if (is_array($playerMap) && array_key_exists((string) $sessionId, $playerMap)) {
+            return (int) $playerMap[(string) $sessionId];
+        }
+
+        $legacyPlayerId = session($this->playerSessionKey($sessionId));
+
+        if (is_numeric($legacyPlayerId)) {
+            $resolvedPlayerId = (int) $legacyPlayerId;
+            $this->rememberPlayerForSession($sessionId, $resolvedPlayerId);
+
+            return $resolvedPlayerId;
+        }
+
+        return null;
     }
 
     private function isCorrectAnswer(QuizQuestion $question, ?string $selectedChoice, ?string $freeTextAnswer): bool

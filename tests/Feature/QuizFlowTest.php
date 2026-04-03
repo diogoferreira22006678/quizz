@@ -228,4 +228,39 @@ class QuizFlowTest extends TestCase
                 ->where('question.time_limit_seconds', 30)
             );
     }
+
+    public function test_player_join_stores_session_mapping_in_compact_cookie_safe_structure(): void
+    {
+        $quiz = Quiz::query()->create([
+            'title' => 'Quick Quiz',
+            'description' => null,
+            'access_code' => 'ABCDEFGH',
+            'status' => 'published',
+            'is_public' => true,
+        ]);
+
+        $session = QuizSession::query()->create([
+            'quiz_id' => $quiz->id,
+            'code' => 'PLAY2026',
+            'state' => 'lobby',
+            'current_question_id' => null,
+            'current_question_position' => 0,
+            'started_at' => null,
+        ]);
+
+        $response = $this->post(route('quizzes.player.join'), [
+            'code' => 'PLAY2026',
+            'nickname' => 'Diogo',
+        ]);
+
+        $response
+            ->assertRedirect(route('quizzes.player.play', $session))
+            ->assertSessionHas('quiz-player-map', function (mixed $value) use ($session): bool {
+                if (! is_array($value)) {
+                    return false;
+                }
+
+                return array_key_exists((string) $session->id, $value) && is_int($value[(string) $session->id]);
+            });
+    }
 }

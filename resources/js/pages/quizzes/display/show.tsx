@@ -85,7 +85,7 @@ export default function QuizDisplayShow({
 
             <main className="min-h-screen bg-slate-100 bg-[radial-gradient(circle_at_top,_rgba(14,116,144,0.2),_transparent_55%),radial-gradient(circle_at_bottom,_rgba(251,191,36,0.2),_transparent_50%)] p-4 text-slate-900 md:p-8 dark:bg-slate-950 dark:text-slate-100">
                 <div className="mx-auto grid w-full max-w-7xl gap-6 xl:grid-cols-[2fr_1fr]">
-                    <section className="space-y-4 rounded-2xl border border-slate-200 bg-white/90 p-6 shadow-xl backdrop-blur dark:border-slate-700 dark:bg-slate-900/90">
+                    <section className="space-y-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-xl backdrop-blur dark:border-slate-700 dark:bg-slate-900">
                         <p className="text-sm font-medium text-cyan-800 dark:text-cyan-200">
                             Sessão {session.code} · {session.state}
                         </p>
@@ -168,7 +168,7 @@ export default function QuizDisplayShow({
                     </section>
 
                     <aside className="space-y-4">
-                        <section className="rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-xl dark:border-slate-700 dark:bg-slate-900/90">
+                        <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xl dark:border-slate-700 dark:bg-slate-900">
                             <h2 className="mb-3 text-lg font-semibold">Leaderboard</h2>
 
                             <div className="space-y-2">
@@ -188,7 +188,7 @@ export default function QuizDisplayShow({
                             </div>
                         </section>
 
-                        <section className="rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-xl dark:border-slate-700 dark:bg-slate-900/90">
+                        <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xl dark:border-slate-700 dark:bg-slate-900">
                             <h2 className="mb-3 text-lg font-semibold">
                                 Respostas em tempo real
                             </h2>
