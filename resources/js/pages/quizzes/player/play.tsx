@@ -21,6 +21,7 @@ type QuestionPayload = {
     prompt: string;
     options: string[] | null;
     media_path: string | null;
+    correct_answer: string | null;
     time_limit_seconds: number | null;
 };
 
@@ -99,6 +100,7 @@ export default function QuizPlayerPlay({
     }, [question, remainingSeconds]);
 
     const questionHasExpired = remainingSeconds !== null && remainingSeconds <= 0;
+    const currentQuestionNumber = Math.max(1, session.current_question_position);
     const canAnswerQuestion =
         question !== null &&
         session.state === 'question_live' &&
@@ -168,6 +170,11 @@ export default function QuizPlayerPlay({
                     <p className="text-sm font-medium text-slate-700">Sessão {session.code}</p>
                     <h1 className="text-xl font-semibold">Olá, {player.nickname}</h1>
                     <p className="text-sm text-slate-700">Pontuação: {player.score}</p>
+                    {totalQuestions > 0 && (
+                        <p className="mt-2 inline-flex rounded-full border border-slate-300 bg-slate-100 px-3 py-1 text-sm font-semibold text-slate-800">
+                            Pergunta {currentQuestionNumber} de {totalQuestions}
+                        </p>
+                    )}
                 </header>
 
                 {!question && (
@@ -199,16 +206,20 @@ export default function QuizPlayerPlay({
                         )}
 
                         {questionHasExpired && !hasAnsweredCurrentQuestion && (
-                            <div className="rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-sm font-medium text-amber-900">
-                                Tempo esgotado para esta pergunta.
-                            </div>
+                            <>
+                                <div className="rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-sm font-medium text-amber-900">
+                                    Tempo esgotado para esta pergunta.
+                                </div>
+
+                                {question.correct_answer && (
+                                    <div className="rounded-lg border border-emerald-300 bg-emerald-50 px-3 py-2 text-sm font-semibold text-emerald-900">
+                                        Resposta correta: {question.correct_answer}
+                                    </div>
+                                )}
+                            </>
                         )}
 
                         <h2 className="text-xl font-semibold">{question.prompt}</h2>
-
-                        <p className="text-sm font-semibold text-slate-700">
-                            Pergunta {session.current_question_position} de {totalQuestions}
-                        </p>
 
                         {question.type === 'multiple_choice' && (
                             <div className="grid gap-3 sm:grid-cols-2">

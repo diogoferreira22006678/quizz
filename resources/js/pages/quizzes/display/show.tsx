@@ -7,6 +7,7 @@ type SessionPayload = {
     code: string;
     state: string;
     started_at: string | null;
+    current_question_position: number;
 };
 
 type QuestionPayload = {
@@ -31,11 +32,13 @@ export default function QuizDisplayShow({
     question,
     leaderboard,
     answersCount,
+    totalQuestions,
 }: {
     session: SessionPayload;
     question: QuestionPayload | null;
     leaderboard: LeaderboardItem[];
     answersCount: number;
+    totalQuestions: number;
 }) {
     const isReveal = session.state === 'answers_revealed';
     const isBlurImage = question?.type === 'blur_image' && question.media_path;
@@ -94,6 +97,12 @@ export default function QuizDisplayShow({
                         <p className="text-sm font-medium text-cyan-800">
                             Sessão {session.code} · {session.state}
                         </p>
+
+                        {totalQuestions > 0 && (
+                            <p className="inline-flex rounded-full border border-slate-300 bg-slate-100 px-3 py-1 text-sm font-semibold text-slate-800">
+                                Pergunta {Math.max(1, session.current_question_position)} de {totalQuestions}
+                            </p>
+                        )}
 
                         {question && remainingSeconds !== null && (
                             <div className="space-y-2">

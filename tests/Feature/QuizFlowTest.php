@@ -226,7 +226,48 @@ class QuizFlowTest extends TestCase
                 ->where('session.started_at', $session->started_at?->toJSON())
                 ->where('session.current_question_position', 1)
                 ->where('question.id', $question->id)
+                ->where('question.correct_answer', 'Lisboa')
                 ->where('question.time_limit_seconds', 30)
+                ->where('totalQuestions', 1)
+            );
+    }
+
+    public function test_display_page_includes_question_progress_payload(): void
+    {
+        $quiz = Quiz::query()->create([
+            'title' => 'Display Quiz',
+            'description' => null,
+            'access_code' => 'ABCDEFGH',
+            'status' => 'published',
+            'is_public' => true,
+        ]);
+
+        $question = QuizQuestion::query()->create([
+            'quiz_id' => $quiz->id,
+            'position' => 1,
+            'type' => 'multiple_choice',
+            'prompt' => 'Capital of Portugal?',
+            'options' => ['Porto', 'Lisboa'],
+            'correct_answer' => 'Lisboa',
+            'time_limit_seconds' => 30,
+            'points' => 150,
+        ]);
+
+        $session = QuizSession::query()->create([
+            'quiz_id' => $quiz->id,
+            'code' => 'PLAY2026',
+            'state' => 'question_live',
+            'current_question_id' => $question->id,
+            'current_question_position' => 1,
+            'started_at' => now(),
+        ]);
+
+        $this
+            ->get(route('quizzes.display.show', $session))
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('quizzes/display/show')
+                ->where('session.id', $session->id)
+                ->where('session.current_question_position', 1)
                 ->where('totalQuestions', 1)
             );
     }

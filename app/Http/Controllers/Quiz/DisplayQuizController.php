@@ -16,6 +16,7 @@ class DisplayQuizController extends Controller
             'currentQuestion',
             'players' => fn ($query) => $query->orderByDesc('score')->limit(20),
         ]);
+        $totalQuestions = $session->quiz->questions->count();
 
         $answersCount = $session->current_question_id === null
             ? 0
@@ -28,6 +29,7 @@ class DisplayQuizController extends Controller
             'question' => $session->currentQuestion,
             'leaderboard' => $session->players,
             'answersCount' => $answersCount,
+            'totalQuestions' => $totalQuestions,
         ]);
     }
 }
