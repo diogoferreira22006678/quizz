@@ -12,6 +12,7 @@ type SessionPayload = {
     code: string;
     state: string;
     started_at: string | null;
+    current_question_position: number;
 };
 
 type QuestionPayload = {
@@ -41,11 +42,13 @@ export default function QuizPlayerPlay({
     question,
     player,
     existingAnswer,
+    totalQuestions,
 }: {
     session: SessionPayload;
     question: QuestionPayload | null;
     player: PlayerPayload;
     existingAnswer: ExistingAnswerPayload;
+    totalQuestions: number;
 }) {
     const hasAnsweredCurrentQuestion = existingAnswer !== null;
     const [answerChoice, setAnswerChoice] = useState(existingAnswer?.answer_choice ?? '');
@@ -202,6 +205,10 @@ export default function QuizPlayerPlay({
                         )}
 
                         <h2 className="text-xl font-semibold">{question.prompt}</h2>
+
+                        <p className="text-sm font-semibold text-slate-700">
+                            Pergunta {session.current_question_position} de {totalQuestions}
+                        </p>
 
                         {question.type === 'multiple_choice' && (
                             <div className="grid gap-3 sm:grid-cols-2">

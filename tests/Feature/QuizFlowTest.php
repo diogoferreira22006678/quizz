@@ -224,8 +224,10 @@ class QuizFlowTest extends TestCase
                 ->component('quizzes/player/play')
                 ->where('session.id', $session->id)
                 ->where('session.started_at', $session->started_at?->toJSON())
+                ->where('session.current_question_position', 1)
                 ->where('question.id', $question->id)
                 ->where('question.time_limit_seconds', 30)
+                ->where('totalQuestions', 1)
             );
     }
 

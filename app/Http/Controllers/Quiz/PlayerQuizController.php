@@ -50,6 +50,7 @@ class PlayerQuizController extends Controller
     public function play(QuizSession $session): Response
     {
         $session->load(['quiz', 'currentQuestion']);
+        $totalQuestions = $session->quiz->questions()->count();
 
         $playerId = $this->playerIdForSession($session->id);
 
@@ -71,6 +72,7 @@ class PlayerQuizController extends Controller
             'question' => $session->currentQuestion,
             'player' => $player,
             'existingAnswer' => $existingAnswer,
+            'totalQuestions' => $totalQuestions,
         ]);
     }
 
