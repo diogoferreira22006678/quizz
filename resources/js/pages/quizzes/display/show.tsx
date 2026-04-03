@@ -83,20 +83,20 @@ export default function QuizDisplayShow({
         <>
             <Head title={`Display ${session.code}`} />
 
-            <main className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(14,116,144,0.2),_transparent_55%),radial-gradient(circle_at_bottom,_rgba(251,191,36,0.2),_transparent_50%)] p-4 text-slate-900 md:p-8">
+            <main className="min-h-screen bg-slate-100 bg-[radial-gradient(circle_at_top,_rgba(14,116,144,0.2),_transparent_55%),radial-gradient(circle_at_bottom,_rgba(251,191,36,0.2),_transparent_50%)] p-4 text-slate-900 md:p-8 dark:bg-slate-950 dark:text-slate-100">
                 <div className="mx-auto grid w-full max-w-7xl gap-6 xl:grid-cols-[2fr_1fr]">
-                    <section className="space-y-4 rounded-2xl border bg-white/85 p-6 shadow-xl backdrop-blur">
-                        <p className="text-sm font-medium text-cyan-700">
+                    <section className="space-y-4 rounded-2xl border border-slate-200 bg-white/90 p-6 shadow-xl backdrop-blur dark:border-slate-700 dark:bg-slate-900/90">
+                        <p className="text-sm font-medium text-cyan-800 dark:text-cyan-200">
                             Sessão {session.code} · {session.state}
                         </p>
 
                         {question && remainingSeconds !== null && (
                             <div className="space-y-2">
-                                <div className="inline-flex items-center rounded-full border border-cyan-300 bg-cyan-50 px-3 py-1 text-sm font-semibold text-cyan-900">
+                                <div className="inline-flex items-center rounded-full border border-cyan-300 bg-cyan-50 px-3 py-1 text-sm font-semibold text-cyan-900 dark:border-cyan-400/50 dark:bg-cyan-950/70 dark:text-cyan-100">
                                     Tempo restante: {remainingSeconds}s
                                 </div>
 
-                                <div className="h-3 w-full overflow-hidden rounded-full bg-slate-200">
+                                <div className="h-3 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">
                                     <div
                                         className="h-full rounded-full bg-gradient-to-r from-emerald-500 via-amber-400 to-rose-500 transition-all duration-700"
                                         style={{
@@ -119,7 +119,7 @@ export default function QuizDisplayShow({
                                     {question.prompt}
                                 </h1>
 
-                                <p className="text-sm font-medium text-slate-600">
+                                <p className="text-sm font-medium text-slate-700 dark:text-slate-300">
                                     Pontos base: {question.points}
                                 </p>
 
@@ -128,7 +128,7 @@ export default function QuizDisplayShow({
                                         {(question.options ?? []).map((option) => (
                                             <div
                                                 key={option}
-                                                className="rounded-xl border border-cyan-200 bg-cyan-50 px-4 py-3 font-medium"
+                                                className="rounded-xl border border-cyan-300 bg-cyan-50 px-4 py-3 font-semibold text-cyan-950 dark:border-cyan-400/50 dark:bg-cyan-950/60 dark:text-cyan-100"
                                             >
                                                 {option}
                                             </div>
@@ -159,7 +159,7 @@ export default function QuizDisplayShow({
                                 )}
 
                                 {isReveal && question.correct_answer && (
-                                    <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-lg font-semibold text-emerald-800">
+                                    <div className="rounded-xl border border-emerald-300 bg-emerald-50 p-4 text-lg font-semibold text-emerald-900 dark:border-emerald-400/60 dark:bg-emerald-950/60 dark:text-emerald-100">
                                         Resposta correta: {question.correct_answer}
                                     </div>
                                 )}
@@ -168,14 +168,14 @@ export default function QuizDisplayShow({
                     </section>
 
                     <aside className="space-y-4">
-                        <section className="rounded-2xl border bg-white/85 p-4 shadow-xl">
+                        <section className="rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-xl dark:border-slate-700 dark:bg-slate-900/90">
                             <h2 className="mb-3 text-lg font-semibold">Leaderboard</h2>
 
                             <div className="space-y-2">
                                 {leaderboard.map((player, index) => (
                                     <div
                                         key={player.id}
-                                        className="flex items-center justify-between rounded-lg border px-3 py-2"
+                                        className="flex items-center justify-between rounded-lg border border-slate-300 px-3 py-2 text-slate-900 dark:border-slate-600 dark:text-slate-100"
                                     >
                                         <span>
                                             #{index + 1} {player.nickname}
@@ -188,13 +188,13 @@ export default function QuizDisplayShow({
                             </div>
                         </section>
 
-                        <section className="rounded-2xl border bg-white/85 p-4 shadow-xl">
+                        <section className="rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-xl dark:border-slate-700 dark:bg-slate-900/90">
                             <h2 className="mb-3 text-lg font-semibold">
                                 Respostas em tempo real
                             </h2>
-                            <div className="rounded-lg border px-3 py-4 text-center">
+                            <div className="rounded-lg border border-slate-300 px-3 py-4 text-center dark:border-slate-600">
                                 <p className="text-3xl font-bold">{answersCount}</p>
-                                <p className="text-sm text-muted-foreground">
+                                <p className="text-sm font-medium text-slate-700 dark:text-slate-300">
                                     respostas recebidas
                                 </p>
                             </div>

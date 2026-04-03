@@ -3,11 +3,13 @@
 namespace Tests\Feature;
 
 use App\Models\Quiz;
+use App\Models\QuizAnswer;
 use App\Models\QuizPlayer;
 use App\Models\QuizQuestion;
 use App\Models\QuizSession;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class QuizFlowTest extends TestCase
@@ -176,5 +178,54 @@ class QuizFlowTest extends TestCase
             'id' => $player->id,
             'score' => 150,
         ]);
+    }
+
+    public function test_player_play_page_includes_timer_payload_for_countdown(): void
+    {
+        $quiz = Quiz::query()->create([
+            'title' => 'Timed Quiz',
+            'description' => null,
+            'access_code' => 'ABCDEFGH',
+            'status' => 'published',
+            'is_public' => true,
+        ]);
+
+        $question = QuizQuestion::query()->create([
+            'quiz_id' => $quiz->id,
+            'position' => 1,
+            'type' => 'multiple_choice',
+            'prompt' => 'Capital of Portugal?',
+            'options' => ['Porto', 'Lisboa'],
+            'correct_answer' => 'Lisboa',
+            'time_limit_seconds' => 30,
+            'points' => 150,
+        ]);
+
+        $session = QuizSession::query()->create([
+            'quiz_id' => $quiz->id,
+            'code' => 'PLAY2026',
+            'state' => 'question_live',
+            'current_question_id' => $question->id,
+            'current_question_position' => 1,
+            'started_at' => now(),
+        ]);
+
+        $player = QuizPlayer::query()->create([
+            'quiz_session_id' => $session->id,
+            'nickname' => 'Diogo',
+            'score' => 0,
+            'joined_at' => now(),
+        ]);
+
+        $this
+            ->withSession(["quiz-player-{$session->id}" => $player->id])
+            ->get(route('quizzes.player.play', $session))
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('quizzes/player/play')
+                ->where('session.id', $session->id)
+                ->where('session.started_at', $session->started_at?->toJSON())
+                ->where('question.id', $question->id)
+                ->where('question.time_limit_seconds', 30)
+            );
     }
 }
